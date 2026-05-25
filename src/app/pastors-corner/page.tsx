@@ -1,198 +1,133 @@
-// src/app/pastors-corner/page.tsx
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { useTheme } from '@/contexts/ThemeContext';
-import { DailyMessage, Sermon } from '@/types';
-import { YouTubeEmbed } from '@/components/YouTubeEmbed';
+import { BookOpen, Calendar, ChevronRight, Mic } from 'lucide-react';
 import { format } from 'date-fns';
-import { BookOpen, Video } from 'lucide-react';
+
+interface PastorMessage { id: string; title: string; content: string; date: Date; author?: string; scripture?: string; }
 
 export default function PastorsCorner() {
-  const { setTheme } = useTheme();
-  const [activeTab, setActiveTab] = useState<'daily' | 'sermons'>('daily');
-  const [dailyMessages, setDailyMessages] = useState<DailyMessage[]>([]);
-  const [sermons, setSermons] = useState<Sermon[]>([]);
-  const [selectedMessage, setSelectedMessage] = useState<DailyMessage | null>(null);
-  const [selectedSermon, setSelectedSermon] = useState<Sermon | null>(null);
+  const [messages, setMessages] = useState<PastorMessage[]>([]);
+  const [selected, setSelected] = useState<PastorMessage | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTheme('pastorscorner');
-    fetchData();
-  }, [setTheme]);
+    getDocs(query(collection(db, 'pastorsCorner'), orderBy('date', 'desc')))
+      .then(snap => {
+        setMessages(snap.docs.map(d => ({ id: d.id, ...d.data(), date: d.data().date?.toDate() })) as PastorMessage[]);
+      }).catch(console.error).finally(() => setLoading(false));
+  }, []);
 
-  const fetchData = async () => {
-    try {
-      // Fetch daily messages
-      const messagesQuery = query(
-        collection(db, 'dailyMessages'),
-        orderBy('date', 'desc'),
-        limit(10)
-      );
-      const messagesSnap = await getDocs(messagesQuery);
-      const messagesData = messagesSnap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        date: doc.data().date?.toDate(),
-        createdAt: doc.data().createdAt?.toDate(),
-      })) as DailyMessage[];
-      setDailyMessages(messagesData);
-      if (messagesData.length > 0) {
-        setSelectedMessage(messagesData[0]);
-      }
+  if (loading) return (
+    <div className="pastor-bg flex items-center justify-center min-h-screen">
+      <div className="loading-spinner" />
+    </div>
+  );
 
-      // Fetch sermons
-      const sermonsQuery = query(
-        collection(db, 'sermons'),
-        orderBy('date', 'desc'),
-        limit(20)
-      );
-      const sermonsSnap = await getDocs(sermonsQuery);
-      const sermonsData = sermonsSnap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        date: doc.data().date?.toDate(),
-        createdAt: doc.data().createdAt?.toDate(),
-      })) as Sermon[];
-      setSermons(sermonsData);
-
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center cross-pattern">
-        <div className="loading-spinner"></div>
+  if (selected) return (
+    <div className="pastor-bg page-transition pb-24 min-h-screen">
+      <div className="px-5 pt-12 pb-6">
+        <button onClick={() => setSelected(null)}
+          className="flex items-center gap-2 text-sm mb-8 cursor-pointer transition-opacity hover:opacity-70"
+          style={{ color: 'rgba(212,175,55,0.8)', fontFamily: "'Cormorant Garamond', serif" }}>
+          ← Back to Messages
+        </button>
+        <div className="pastor-divider" />
+        {selected.scripture && (
+          <p className="text-xs tracking-[2px] uppercase mb-2" style={{ color: 'rgba(212,175,55,0.6)' }}>
+            {selected.scripture}
+          </p>
+        )}
+        <h1 className="font-cinzel text-2xl font-bold leading-tight mb-2" style={{ color: '#F0EAD6' }}>
+          {selected.title}
+        </h1>
+        {selected.author && (
+          <p className="text-sm mb-1" style={{ color: 'rgba(212,175,55,0.7)', fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic' }}>
+            — {selected.author}
+          </p>
+        )}
+        {selected.date && (
+          <p className="text-xs mb-8" style={{ color: 'rgba(156,163,175,0.7)' }}>
+            {format(selected.date, 'MMMM d, yyyy')}
+          </p>
+        )}
+        <div className="pastor-divider" />
+        <p className="font-cormorant text-lg leading-[1.9]" style={{ color: 'rgba(240,234,214,0.9)' }}>
+          {selected.content}
+        </p>
       </div>
-    );
-  }
+    </div>
+  );
 
   return (
-    <div className="page-transition min-h-screen cross-pattern p-6">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold font-playfair text-center mb-8" style={{ color: 'var(--accent-color)' }}>
-          Pastor's Corner
-        </h1>
-
-        {/* Tabs */}
-        <div className="flex gap-4 mb-6">
-          <button
-            onClick={() => setActiveTab('daily')}
-            className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
-              activeTab === 'daily' ? 'shadow-lg' : 'opacity-60'
-            }`}
-            style={{
-              backgroundColor: activeTab === 'daily' ? 'var(--accent-color)' : 'rgba(212, 175, 55, 0.2)',
-              color: activeTab === 'daily' ? 'var(--bg-color)' : 'var(--text-color)',
-            }}
-          >
-            <BookOpen className="inline mr-2" size={20} />
-            Daily Message
-          </button>
-          <button
-            onClick={() => setActiveTab('sermons')}
-            className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
-              activeTab === 'sermons' ? 'shadow-lg' : 'opacity-60'
-            }`}
-            style={{
-              backgroundColor: activeTab === 'sermons' ? 'var(--accent-color)' : 'rgba(212, 175, 55, 0.2)',
-              color: activeTab === 'sermons' ? 'var(--bg-color)' : 'var(--text-color)',
-            }}
-          >
-            <Video className="inline mr-2" size={20} />
-            Sunday Sermons
-          </button>
+    <div className="pastor-bg page-transition pb-24 min-h-screen">
+      {/* Header */}
+      <div className="px-5 pt-12 pb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+            style={{ background: 'rgba(212,175,55,0.12)', border: '1px solid rgba(212,175,55,0.25)' }}>
+            <Mic size={18} style={{ color: '#D4AF37' }} />
+          </div>
+          <div>
+            <h1 className="font-cinzel text-xl font-bold" style={{ color: '#F0EAD6' }}>
+              Pastor's Corner
+            </h1>
+            <p className="text-xs" style={{ color: 'rgba(156,163,175,0.7)', fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic' }}>
+              Words of wisdom & devotion
+            </p>
+          </div>
         </div>
+        <div className="pastor-divider" />
+      </div>
 
-        {/* Daily Messages Tab */}
-        {activeTab === 'daily' && (
-          <div className="space-y-6">
-            {selectedMessage && (
-              <div className="p-6 rounded-lg shadow-lg backdrop-blur-sm"
-                   style={{ backgroundColor: 'rgba(212, 175, 55, 0.1)' }}>
-                <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--accent-color)' }}>
-                  {selectedMessage.title}
-                </h2>
-                <p className="text-sm opacity-75 mb-4">{format(selectedMessage.date, 'MMMM dd, yyyy')}</p>
-                <YouTubeEmbed url={selectedMessage.youtubeUrl} title={selectedMessage.title} />
-              </div>
-            )}
-
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Previous Messages</h3>
-              <div className="space-y-3">
-                {dailyMessages.map((message) => (
-                  <div
-                    key={message.id}
-                    onClick={() => setSelectedMessage(message)}
-                    className={`p-4 rounded-lg cursor-pointer transition-all duration-300 ${
-                      selectedMessage?.id === message.id ? 'shadow-lg' : 'opacity-75 hover:opacity-100'
-                    }`}
-                    style={{
-                      backgroundColor: selectedMessage?.id === message.id 
-                        ? 'rgba(212, 175, 55, 0.2)' 
-                        : 'rgba(212, 175, 55, 0.05)',
-                      borderLeft: selectedMessage?.id === message.id ? '4px solid var(--accent-color)' : 'none',
-                    }}
-                  >
-                    <p className="font-semibold">{message.title}</p>
-                    <p className="text-xs opacity-75 mt-1">{format(message.date, 'MMM dd, yyyy')}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+      {/* Messages */}
+      <div className="px-5 space-y-4">
+        {messages.length === 0 ? (
+          <div className="text-center py-16">
+            <BookOpen size={40} style={{ color: 'rgba(212,175,55,0.3)' }} className="mx-auto mb-3" />
+            <p className="font-cormorant text-lg italic" style={{ color: 'rgba(240,234,214,0.5)' }}>
+              No messages yet
+            </p>
           </div>
-        )}
-
-        {/* Sermons Tab */}
-        {activeTab === 'sermons' && (
-          <div className="space-y-6">
-            {selectedSermon && (
-              <div className="p-6 rounded-lg shadow-lg backdrop-blur-sm"
-                   style={{ backgroundColor: 'rgba(212, 175, 55, 0.1)' }}>
-                <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--accent-color)' }}>
-                  {selectedSermon.title}
-                </h2>
-                <p className="text-sm opacity-75 mb-4">{format(selectedSermon.date, 'MMMM dd, yyyy')}</p>
-                <YouTubeEmbed url={selectedSermon.youtubeUrl} title={selectedSermon.title} />
-              </div>
-            )}
-
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Sermon Library</h3>
-              <div className="space-y-3">
-                {sermons.map((sermon) => (
-                  <div
-                    key={sermon.id}
-                    onClick={() => setSelectedSermon(sermon)}
-                    className={`p-4 rounded-lg cursor-pointer transition-all duration-300 ${
-                      selectedSermon?.id === sermon.id ? 'shadow-lg' : 'opacity-75 hover:opacity-100'
-                    }`}
-                    style={{
-                      backgroundColor: selectedSermon?.id === sermon.id 
-                        ? 'rgba(212, 175, 55, 0.2)' 
-                        : 'rgba(212, 175, 55, 0.05)',
-                      borderLeft: selectedSermon?.id === sermon.id ? '4px solid var(--accent-color)' : 'none',
-                    }}
-                  >
-                    <p className="font-semibold">
-                      {sermon.title}
-                      {sermon.partNumber && ` - Part ${sermon.partNumber}`}
+        ) : messages.map((msg, i) => (
+          <button key={msg.id} onClick={() => setSelected(msg)} className="w-full text-left">
+            <div className="pastor-card p-5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1">
+                  {msg.scripture && (
+                    <p className="text-[10px] tracking-[2px] uppercase mb-2"
+                      style={{ color: 'rgba(212,175,55,0.6)' }}>
+                      {msg.scripture}
                     </p>
-                    <p className="text-xs opacity-75 mt-1">{format(sermon.date, 'MMM dd, yyyy')}</p>
+                  )}
+                  <h2 className="font-cinzel text-base font-semibold leading-snug mb-2"
+                    style={{ color: '#F0EAD6' }}>
+                    {msg.title}
+                  </h2>
+                  <p className="text-sm leading-relaxed line-clamp-2 font-cormorant"
+                    style={{ color: 'rgba(156,163,175,0.8)' }}>
+                    {msg.content}
+                  </p>
+                  <div className="flex items-center gap-3 mt-3">
+                    {msg.author && (
+                      <span className="text-[11px] italic" style={{ color: 'rgba(212,175,55,0.6)', fontFamily: "'Cormorant Garamond', serif" }}>
+                        — {msg.author}
+                      </span>
+                    )}
+                    {msg.date && (
+                      <span className="text-[11px]" style={{ color: 'rgba(156,163,175,0.5)' }}>
+                        {format(msg.date, 'MMM d, yyyy')}
+                      </span>
+                    )}
                   </div>
-                ))}
+                </div>
+                <ChevronRight size={16} style={{ color: 'rgba(212,175,55,0.4)', flexShrink: 0, marginTop: 4 }} />
               </div>
             </div>
-          </div>
-        )}
+          </button>
+        ))}
       </div>
     </div>
   );

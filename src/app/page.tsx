@@ -1,157 +1,169 @@
-// src/app/page.tsx
 'use client';
 
 import React, { useEffect, useState } from 'react';
 import { collection, query, orderBy, limit, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { LogoText } from '@/components/Logo';
 import { InstallButton } from '@/components/InstallButton';
 import { AnnouncementCard } from '@/components/AnnouncementCard';
-import { useTheme } from '@/contexts/ThemeContext';
-import { Announcement, DailyMessage, AppSettings } from '@/types';
-import { Calendar, BookOpen } from 'lucide-react';
-import { format } from 'date-fns';
+import { Announcement, AppSettings } from '@/types';
+import { Calendar, BookOpen, Heart, ChevronRight, Cross } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Home() {
-  const { setTheme } = useTheme();
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [todayMessage, setTodayMessage] = useState<DailyMessage | null>(null);
-  const [verseOfDay, setVerseOfDay] = useState<string>('Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go. - Joshua 1:9');
+  const [verseOfDay, setVerseOfDay] = useState('The Lord is my shepherd, I shall not want. — Psalm 23:1');
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setTheme('home');
-    fetchData();
-  }, [setTheme]);
+  useEffect(() => { fetchData(); }, []);
 
   const fetchData = async () => {
     try {
-      // Fetch upcoming announcements
-      const announcementsQuery = query(
-        collection(db, 'globalAnnouncements'),
-        orderBy('date', 'desc'),
-        limit(5)
-      );
-      const announcementsSnap = await getDocs(announcementsQuery);
-      const announcementsData = announcementsSnap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        date: doc.data().date?.toDate(),
-        createdAt: doc.data().createdAt?.toDate(),
+      const q = query(collection(db, 'globalAnnouncements'), orderBy('date', 'desc'), limit(3));
+      const snap = await getDocs(q);
+      const data = snap.docs.map(d => ({
+        id: d.id, ...d.data(),
+        date: d.data().date?.toDate(),
+        createdAt: d.data().createdAt?.toDate(),
       })) as Announcement[];
-      setAnnouncements(announcementsData);
+      setAnnouncements(data);
 
-      // Fetch today's daily message
-      const messagesQuery = query(
-        collection(db, 'dailyMessages'),
-        orderBy('date', 'desc'),
-        limit(1)
-      );
-      const messagesSnap = await getDocs(messagesQuery);
-      if (!messagesSnap.empty) {
-        const messageData = messagesSnap.docs[0].data();
-        setTodayMessage({
-          id: messagesSnap.docs[0].id,
-          ...messageData,
-          date: messageData.date?.toDate(),
-          createdAt: messageData.createdAt?.toDate(),
-        } as DailyMessage);
-      }
-
-      // Fetch verse of the day
       const settingsDoc = await getDoc(doc(db, 'appSettings', 'main'));
       if (settingsDoc.exists()) {
-        const settings = settingsDoc.data() as AppSettings;
-        if (settings.verseOfTheDay) {
-          setVerseOfDay(settings.verseOfTheDay);
-        }
+        const s = settingsDoc.data() as AppSettings;
+        if (s.verseOfTheDay) setVerseOfDay(s.verseOfTheDay);
       }
-
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setLoading(false);
-    }
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="loading-spinner"></div>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="home-bg flex items-center justify-center min-h-screen">
+      <div className="loading-spinner" />
+    </div>
+  );
+
+  const quickLinks = [
+    { href: '/pastors-corner', icon: BookOpen,  label: "Pastor's Corner",  desc: 'Messages & devotions',       bg: 'rgba(45,27,105,0.6)',  border: 'rgba(212,175,55,0.25)' },
+    { href: '/youth',          icon: Heart,     label: 'Youth',             desc: 'Connect & grow',             bg: 'rgba(124,58,237,0.2)', border: 'rgba(0,255,136,0.2)'   },
+    { href: '/sunday-school',  icon: Calendar,  label: 'Sunday School',     desc: 'Learn & explore',            bg: 'rgba(249,115,22,0.15)',border: 'rgba(249,115,22,0.3)'  },
+    { href: '/announcements',  icon: ChevronRight, label: 'All Events',     desc: 'Upcoming & recent',          bg: 'rgba(167,139,250,0.1)',border: 'rgba(167,139,250,0.2)' },
+  ];
 
   return (
-    <div className="page-transition min-h-screen p-6">
-      {/* Hero Section */}
-      <div className="text-center mb-8">
-        <div className="flex justify-center mb-4">
-          <LogoText />
+    <div className="home-bg page-transition pb-24">
+      {/* Hero */}
+      <div className="home-hero-glow relative px-6 pt-14 pb-8 text-center overflow-hidden">
+        {/* Background stars */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className="absolute rounded-full bg-white"
+              style={{
+                width: Math.random() * 2 + 1,
+                height: Math.random() * 2 + 1,
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                opacity: Math.random() * 0.4 + 0.1,
+              }}
+            />
+          ))}
         </div>
-        <p className="text-lg opacity-90 mb-6">Welcome to our community</p>
-        <InstallButton />
+
+        {/* Cross icon */}
+        <div className="relative z-10 flex justify-center mb-5">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center"
+            style={{ background: 'rgba(124,58,237,0.2)', border: '1px solid rgba(212,175,55,0.35)' }}>
+            <svg width="28" height="36" viewBox="0 0 28 36" fill="none">
+              <rect x="11" y="0" width="6" height="36" rx="3" fill="#D4AF37"/>
+              <rect x="0" y="10" width="28" height="6" rx="3" fill="#D4AF37"/>
+            </svg>
+          </div>
+        </div>
+
+        <h1 className="font-cinzel text-2xl font-bold gold-text relative z-10 leading-tight mb-1">
+          Christ Restoration Centre
+        </h1>
+        <p className="font-cormorant text-base italic relative z-10 mb-6"
+          style={{ color: 'rgba(196,181,253,0.8)' }}>
+          Welcome to our community
+        </p>
+        <div className="relative z-10">
+          <InstallButton />
+        </div>
       </div>
 
       {/* Verse of the Day */}
-      <div
-        className="p-6 rounded-lg shadow-lg mb-6 backdrop-blur-sm"
-        style={{
-          backgroundColor: 'rgba(212, 175, 55, 0.15)',
-          borderLeft: '4px solid var(--accent-color)',
-        }}
-      >
-        <h2 className="text-sm font-semibold mb-2 opacity-75">VERSE OF THE DAY</h2>
-        <p className="text-lg italic font-playfair">{verseOfDay}</p>
-      </div>
-
-      {/* Today's Pastor's Corner */}
-      {todayMessage && (
-        <Link href="/pastors-corner">
-          <div className="p-4 rounded-lg shadow-lg mb-6 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] cursor-pointer"
-               style={{ backgroundColor: 'rgba(212, 175, 55, 0.15)' }}>
-            <div className="flex items-center gap-2 mb-2">
-              <BookOpen size={20} style={{ color: 'var(--accent-color)' }} />
-              <h2 className="font-semibold">Today's Message</h2>
-            </div>
-            <p className="text-sm opacity-90">{todayMessage.title}</p>
-            <p className="text-xs opacity-75 mt-1">{format(todayMessage.date, 'MMM dd, yyyy')}</p>
-          </div>
-        </Link>
-      )}
-
-      {/* Upcoming Events/Announcements */}
-      <div className="mb-6">
-        <div className="flex items-center gap-2 mb-4">
-          <Calendar size={24} style={{ color: 'var(--accent-color)' }} />
-          <h2 className="text-xl font-bold">Upcoming Events</h2>
-        </div>
-        <div className="space-y-4">
-          {announcements.length > 0 ? (
-            announcements.map((announcement) => (
-              <AnnouncementCard key={announcement.id} announcement={announcement} />
-            ))
-          ) : (
-            <p className="text-center opacity-75">No upcoming events at this time.</p>
-          )}
+      <div className="px-5 mb-5">
+        <div className="verse-card">
+          <p className="text-[10px] font-semibold tracking-[2px] uppercase mb-3"
+            style={{ color: 'rgba(212,175,55,0.7)' }}>
+            ✦ Verse of the Day
+          </p>
+          <p className="font-cormorant text-lg italic leading-relaxed"
+            style={{ color: '#F5F0FF' }}>
+            "{verseOfDay}"
+          </p>
         </div>
       </div>
 
       {/* Quick Links */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <Link href="/announcements">
-          <div className="p-4 rounded-lg text-center shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105"
-               style={{ backgroundColor: 'rgba(212, 175, 55, 0.15)' }}>
-            <Calendar size={32} className="mx-auto mb-2" style={{ color: 'var(--accent-color)' }} />
-            <p className="font-semibold">All Events</p>
+      <div className="px-5 mb-5">
+        <p className="font-cinzel text-xs tracking-[2px] uppercase mb-3"
+          style={{ color: 'rgba(167,139,250,0.6)' }}>
+          Explore
+        </p>
+        <div className="grid grid-cols-2 gap-3">
+          {quickLinks.map((link) => {
+            const Icon = link.icon;
+            return (
+              <Link key={link.href} href={link.href}>
+                <div className="p-4 rounded-[16px] h-full transition-all duration-200 active:scale-95"
+                  style={{ background: link.bg, border: `1px solid ${link.border}` }}>
+                  <Icon size={20} className="mb-2" style={{ color: '#D4AF37' }} />
+                  <p className="font-semibold text-sm mb-0.5" style={{ color: '#F5F0FF' }}>
+                    {link.label}
+                  </p>
+                  <p className="text-[11px]" style={{ color: 'rgba(196,181,253,0.6)' }}>
+                    {link.desc}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Announcements */}
+      {announcements.length > 0 && (
+        <div className="px-5 mb-5">
+          <div className="flex items-center justify-between mb-3">
+            <p className="font-cinzel text-xs tracking-[2px] uppercase"
+              style={{ color: 'rgba(167,139,250,0.6)' }}>
+              Upcoming Events
+            </p>
+            <Link href="/announcements">
+              <span className="text-[11px] flex items-center gap-1"
+                style={{ color: 'rgba(212,175,55,0.7)' }}>
+                See all <ChevronRight size={12} />
+              </span>
+            </Link>
           </div>
-        </Link>
+          <div className="space-y-3">
+            {announcements.map((a) => (
+              <AnnouncementCard key={a.id} announcement={a} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Give section */}
+      <div className="px-5 mb-5">
         <Link href="/giving">
-          <div className="p-4 rounded-lg text-center shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105"
-               style={{ backgroundColor: 'rgba(212, 175, 55, 0.15)' }}>
-            <BookOpen size={32} className="mx-auto mb-2" style={{ color: 'var(--accent-color)' }} />
-            <p className="font-semibold">Give</p>
+          <div className="p-5 rounded-[16px] text-center transition-all duration-200 active:scale-95"
+            style={{ background: 'linear-gradient(135deg, rgba(212,175,55,0.15), rgba(124,58,237,0.1))', border: '1px solid rgba(212,175,55,0.25)' }}>
+            <p className="gold-text font-cinzel text-base font-bold mb-1">Give & Support</p>
+            <p className="text-[12px]" style={{ color: 'rgba(196,181,253,0.7)' }}>
+              Sow into the Kingdom — every gift makes a difference
+            </p>
           </div>
         </Link>
       </div>

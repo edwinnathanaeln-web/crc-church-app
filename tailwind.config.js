@@ -7,47 +7,24 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        brand: {
-          teal: '#0D5C63',
-          gold: '#D4AF37',
-        },
-        pastor: {
-          bg: '#3A2C3E',
-          accent: '#D4AF37',
-        },
-        youth: {
-          bg: '#1E1E24',
-          accent: '#00E5FF',
-        },
-        sunday: {
-          bg: '#A8DADC',
-          accent: '#F4D03F',
-        },
-      },
       fontFamily: {
-        playfair: ['Playfair Display', 'serif'],
-        poppins: ['Poppins', 'sans-serif'],
-        nunito: ['Nunito', 'sans-serif'],
+        cinzel:    ['Cinzel', 'serif'],
+        cormorant: ['Cormorant Garamond', 'serif'],
+        russo:     ['Russo One', 'sans-serif'],
+        chakra:    ['Chakra Petch', 'sans-serif'],
+        baloo:     ['Baloo 2', 'cursive'],
+        comic:     ['Comic Neue', 'cursive'],
+      },
+      colors: {
+        gold: '#D4AF37',
+        home:   { bg: '#0f0520', primary: '#7C3AED', accent: '#D4AF37' },
+        pastor: { bg: '#0D0D0D', accent: '#D4AF37' },
+        youth:  { bg: '#0a0a0f', primary: '#7C3AED', neon: '#00FF88' },
+        sunday: { bg: '#FFF8F0', primary: '#F97316' },
       },
       animation: {
-        'float': 'float 6s ease-in-out infinite',
-        'slide-in': 'slideIn 0.5s ease-out',
-        'fade-in': 'fadeIn 0.5s ease-out',
-      },
-      keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-20px)' },
-        },
-        slideIn: {
-          '0%': { transform: 'translateX(100%)', opacity: '0' },
-          '100%': { transform: 'translateX(0)', opacity: '1' },
-        },
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
+        'blob-drift': 'blob-drift 8s ease-in-out infinite',
+        'page-in': 'page-in 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
       },
     },
   },

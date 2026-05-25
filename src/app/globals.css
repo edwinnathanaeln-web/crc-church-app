@@ -1,154 +1,360 @@
-/* src/app/globals.css */
+/* ═══════════════════════════════════════════════════════════
+   CRC CHURCH APP — Global Design System
+   Generated via UI/UX Pro Max Skill
+   ═══════════════════════════════════════════════════════════ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;600;700&family=Nunito:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500&family=Inter:wght@300;400;500;600;700&family=Russo+One&family=Chakra+Petch:wght@300;400;500;600;700&family=Baloo+2:wght@400;500;600;700&family=Comic+Neue:wght@300;400;700&display=swap');
 
+/* ── CSS VARIABLES PER SECTION ─────────────────────────── */
 :root {
-  --bg-color: #0D5C63;
-  --accent-color: #D4AF37;
-  --text-color: #FFFFFF;
-  --font-family: 'Playfair Display', serif;
+  /* HOME — Spiritual Purple + Gold */
+  --home-bg: #0f0520;
+  --home-bg2: #1a0836;
+  --home-primary: #7C3AED;
+  --home-secondary: #A78BFA;
+  --home-accent: #D4AF37;
+  --home-text: #F5F0FF;
+  --home-muted: #C4B5FD;
+
+  /* PASTOR'S CORNER — Dark Elegant */
+  --pastor-bg: #0D0D0D;
+  --pastor-bg2: #1A1A1A;
+  --pastor-primary: #2D1B69;
+  --pastor-accent: #D4AF37;
+  --pastor-text: #F0EAD6;
+  --pastor-muted: #9CA3AF;
+  --pastor-border: rgba(212,175,55,0.2);
+
+  /* YOUTH — Vibrant Block */
+  --youth-bg: #0a0a0f;
+  --youth-bg2: #13131f;
+  --youth-primary: #7C3AED;
+  --youth-accent: #16A34A;
+  --youth-neon: #00FF88;
+  --youth-text: #FFFFFF;
+  --youth-muted: #A78BFA;
+
+  /* SUNDAY SCHOOL — Claymorphism Warm */
+  --sunday-bg: #FFF8F0;
+  --sunday-bg2: #FEF3C7;
+  --sunday-primary: #F97316;
+  --sunday-secondary: #FB923C;
+  --sunday-accent: #10B981;
+  --sunday-text: #1C1917;
+  --sunday-muted: #78716C;
+
+  /* SHARED */
+  --gold: #D4AF37;
+  --radius-clay: 28px;
+  --radius-card: 16px;
+  --transition: 200ms ease;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: var(--font-family);
-  transition: background-color 0.5s ease, color 0.5s ease;
+  font-family: 'Inter', sans-serif;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Cross pattern for Pastor's Corner */
-.cross-pattern {
-  background-image: 
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 35px,
-      rgba(212, 175, 55, 0.03) 35px,
-      rgba(212, 175, 55, 0.03) 37px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 35px,
-      rgba(212, 175, 55, 0.03) 35px,
-      rgba(212, 175, 55, 0.03) 37px
-    );
+/* ── FONTS ──────────────────────────────────────────────── */
+.font-cinzel     { font-family: 'Cinzel', serif; }
+.font-cormorant  { font-family: 'Cormorant Garamond', serif; }
+.font-russo      { font-family: 'Russo One', sans-serif; }
+.font-chakra     { font-family: 'Chakra Petch', sans-serif; }
+.font-baloo      { font-family: 'Baloo 2', cursive; }
+.font-comic      { font-family: 'Comic Neue', cursive; }
+
+/* ── HOME SECTION STYLES ────────────────────────────────── */
+.home-bg {
+  background: linear-gradient(145deg, var(--home-bg) 0%, var(--home-bg2) 50%, #0d0625 100%);
+  color: var(--home-text);
+  min-height: 100vh;
 }
 
-/* Clouds animation for Sunday School */
-.clouds-pattern {
+.home-hero-glow {
+  position: relative;
+}
+.home-hero-glow::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(124,58,237,0.3) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-card {
+  background: rgba(124, 58, 237, 0.08);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: var(--radius-card);
+  backdrop-filter: blur(12px);
+  transition: all var(--transition);
+}
+.home-card:hover {
+  background: rgba(124, 58, 237, 0.14);
+  border-color: rgba(212, 175, 55, 0.4);
+  transform: translateY(-2px);
+}
+
+.gold-text {
+  background: linear-gradient(135deg, #D4AF37 0%, #F5D479 50%, #B8941F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gold-border {
+  border: 1px solid rgba(212, 175, 55, 0.35);
+}
+
+.verse-card {
+  background: linear-gradient(135deg,
+    rgba(212,175,55,0.12) 0%,
+    rgba(124,58,237,0.08) 100%);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 var(--radius-card) var(--radius-card) 0;
+  padding: 20px 20px 20px 24px;
+}
+
+/* ── PASTOR'S CORNER STYLES ─────────────────────────────── */
+.pastor-bg {
+  background: linear-gradient(160deg, #0D0D0D 0%, #1A1A1A 60%, #0f0a1a 100%);
+  color: var(--pastor-text);
+  min-height: 100vh;
+}
+
+.pastor-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--pastor-border);
+  border-radius: var(--radius-card);
+  transition: all var(--transition);
   position: relative;
   overflow: hidden;
 }
-
-.clouds-pattern::before,
-.clouds-pattern::after {
+.pastor-card::before {
   content: '';
   position: absolute;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 100px;
-  animation: float 20s infinite ease-in-out;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent);
+}
+.pastor-card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(212,175,55,0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
-.clouds-pattern::before {
-  width: 200px;
-  height: 60px;
-  top: 10%;
-  left: -100px;
-  animation-delay: 0s;
+.pastor-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.4), transparent);
+  margin: 24px 0;
 }
 
-.clouds-pattern::after {
-  width: 150px;
-  height: 50px;
-  top: 30%;
-  right: -100px;
-  animation-delay: 10s;
+/* ── YOUTH SECTION STYLES ───────────────────────────────── */
+.youth-bg {
+  background: linear-gradient(135deg, #0a0a0f 0%, #13131f 50%, #0f0a1f 100%);
+  color: var(--youth-text);
+  min-height: 100vh;
 }
 
-/* Glassmorphism for Youth */
-.glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-
-/* Smooth page transitions */
-.page-transition {
-  animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--accent-color);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-color);
-  opacity: 0.8;
-}
-
-/* Loading animation */
-.loading-spinner {
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top: 3px solid var(--accent-color);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Polaroid frame for Sunday School */
-.polaroid-frame {
-  background: white;
-  padding: 10px;
-  padding-bottom: 40px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transform: rotate(-2deg);
-  transition: transform 0.3s ease;
-}
-
-.polaroid-frame:hover {
-  transform: rotate(0deg) scale(1.05);
-}
-
-/* Prevent scrolling when modal is open */
-body.modal-open {
+.youth-card {
+  background: rgba(124,58,237,0.08);
+  border: 1px solid rgba(124,58,237,0.25);
+  border-radius: var(--radius-card);
+  transition: all var(--transition);
+  position: relative;
   overflow: hidden;
+}
+.youth-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--youth-primary), var(--youth-neon));
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.youth-card:hover {
+  border-color: rgba(124,58,237,0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(124,58,237,0.2);
+}
+.youth-card:hover::after { opacity: 1; }
+
+.youth-badge {
+  background: linear-gradient(135deg, #7C3AED, #5B21B6);
+  color: white;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-family: 'Russo One', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.youth-neon-text {
+  color: var(--youth-neon);
+  text-shadow: 0 0 20px rgba(0,255,136,0.4);
+}
+
+.youth-grid-pattern {
+  background-image: linear-gradient(rgba(124,58,237,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── SUNDAY SCHOOL STYLES (Claymorphism) ────────────────── */
+.sunday-bg {
+  background: linear-gradient(135deg, #FFF8F0 0%, #FEF3C7 50%, #FFF0E6 100%);
+  color: var(--sunday-text);
+  min-height: 100vh;
+}
+
+.clay-card {
+  background: white;
+  border-radius: var(--radius-clay);
+  box-shadow:
+    0 8px 0 #e8e0d0,
+    0 12px 24px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+.clay-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow:
+    0 12px 0 #e8e0d0,
+    0 20px 32px rgba(0,0,0,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.clay-card:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow:
+    0 4px 0 #e8e0d0,
+    0 6px 12px rgba(0,0,0,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.clay-button {
+  background: linear-gradient(135deg, #F97316, #EA580C);
+  color: white;
+  border-radius: 20px;
+  padding: 12px 28px;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 15px;
+  border: none;
+  box-shadow: 0 6px 0 #C2410C, 0 8px 20px rgba(249,115,22,0.3);
+  transition: all 150ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+.clay-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #C2410C, 0 12px 24px rgba(249,115,22,0.35);
+}
+.clay-button:active {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 #C2410C, 0 4px 12px rgba(249,115,22,0.2);
+}
+
+.clay-badge {
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: white;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 600;
+  font-size: 12px;
+  box-shadow: 0 3px 0 #047857;
+}
+
+.floating-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.4;
+  animation: blob-drift 8s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes blob-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(15px, -20px) scale(1.05); }
+  66% { transform: translate(-10px, 10px) scale(0.95); }
+}
+
+/* ── BOTTOM NAV ─────────────────────────────────────────── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 50;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+  gap: 3px;
+  cursor: pointer;
+  transition: all var(--transition);
+  min-width: 44px;
+  min-height: 44px;
+  text-decoration: none;
+}
+
+.nav-item span {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ── SHARED UTILITIES ────────────────────────────────────── */
+.page-transition {
+  animation: page-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.loading-spinner {
+  width: 36px; height: 36px;
+  border: 3px solid rgba(255,255,255,0.15);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Smooth scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.3); border-radius: 2px; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
