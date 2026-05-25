@@ -1,0 +1,154 @@
+/* src/app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;600;700&family=Nunito:wght@300;400;600;700&display=swap');
+
+:root {
+  --bg-color: #0D5C63;
+  --accent-color: #D4AF37;
+  --text-color: #FFFFFF;
+  --font-family: 'Playfair Display', serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  transition: background-color 0.5s ease, color 0.5s ease;
+  overflow-x: hidden;
+}
+
+/* Cross pattern for Pastor's Corner */
+.cross-pattern {
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 35px,
+      rgba(212, 175, 55, 0.03) 35px,
+      rgba(212, 175, 55, 0.03) 37px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 35px,
+      rgba(212, 175, 55, 0.03) 35px,
+      rgba(212, 175, 55, 0.03) 37px
+    );
+}
+
+/* Clouds animation for Sunday School */
+.clouds-pattern {
+  position: relative;
+  overflow: hidden;
+}
+
+.clouds-pattern::before,
+.clouds-pattern::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 100px;
+  animation: float 20s infinite ease-in-out;
+}
+
+.clouds-pattern::before {
+  width: 200px;
+  height: 60px;
+  top: 10%;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.clouds-pattern::after {
+  width: 150px;
+  height: 50px;
+  top: 30%;
+  right: -100px;
+  animation-delay: 10s;
+}
+
+/* Glassmorphism for Youth */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Smooth page transitions */
+.page-transition {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+  opacity: 0.8;
+}
+
+/* Loading animation */
+.loading-spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid var(--accent-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Polaroid frame for Sunday School */
+.polaroid-frame {
+  background: white;
+  padding: 10px;
+  padding-bottom: 40px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: rotate(-2deg);
+  transition: transform 0.3s ease;
+}
+
+.polaroid-frame:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+/* Prevent scrolling when modal is open */
+body.modal-open {
+  overflow: hidden;
+}
