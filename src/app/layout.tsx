@@ -6,11 +6,9 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { BottomNav } from '@/components/BottomNav';
 
 export const viewport: Viewport = {
-  themeColor: '#0D5C63',
+  themeColor: '#0f0520',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 };
 
 export const metadata: Metadata = {

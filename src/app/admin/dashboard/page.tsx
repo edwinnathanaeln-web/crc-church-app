@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
-import { BookOpen, Users, GraduationCap, Megaphone, Image, LogOut } from 'lucide-react';
+import { BookOpen, Users, GraduationCap, Megaphone, Image, LogOut, Settings } from 'lucide-react';
 
 export default function AdminDashboard() {
   const { user, loading, signOut } = useAuth();
@@ -36,6 +36,7 @@ export default function AdminDashboard() {
     { href: '/admin/sunday-school', icon: GraduationCap, label: 'Sunday School', description: 'Manage Sunday School', color: '#A8DADC' },
     { href: '/admin/announcements-mgmt', icon: Megaphone, label: 'Announcements', description: 'Manage all announcements', color: '#D4AF37' },
     { href: '/admin/gallery-mgmt', icon: Image, label: 'Gallery', description: 'Manage media gallery', color: '#0D5C63' },
+    { href: '/admin/settings', icon: Settings, label: 'App Settings', description: 'Verse of the day & social media links', color: '#7C3AED' },
   ];
 
   return (

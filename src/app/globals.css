@@ -298,13 +298,13 @@ body {
   position: fixed;
   bottom: 0; left: 0; right: 0;
   z-index: 50;
-  height: 68px;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-around;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .nav-item {
@@ -313,19 +313,88 @@ body {
   align-items: center;
   justify-content: center;
   flex: 1;
-  height: 100%;
+  min-height: 56px;
   gap: 3px;
   cursor: pointer;
   transition: all var(--transition);
   min-width: 44px;
-  min-height: 44px;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .nav-item span {
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.3px;
+}
+
+/* ── GIVING PAGE ─────────────────────────────────────────── */
+.giving-bank-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  gap: 12px;
+}
+.giving-bank-row:focus-within {
+  outline: 2px solid rgba(212,175,55,0.6);
+  outline-offset: 1px;
+}
+
+/* ── GALLERY ─────────────────────────────────────────────── */
+.gallery-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.gallery-item:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+.gallery-item-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background 200ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gallery-item:hover .gallery-item-overlay,
+.gallery-item:focus .gallery-item-overlay {
+  background: rgba(0,0,0,0.35);
+}
+
+/* ── ADMIN SIDEBAR ───────────────────────────────────────── */
+.admin-sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 240px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  transition: transform 300ms ease;
+}
+.admin-sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 39;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+  animation: fade-in 200ms ease;
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@media (min-width: 1024px) {
+  .admin-sidebar { position: sticky; height: 100vh; }
+  .admin-layout-main { margin-left: 0; }
 }
 
 /* ── SHARED UTILITIES ────────────────────────────────────── */

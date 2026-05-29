@@ -1,99 +1,156 @@
-// src/components/GalleryGrid.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { X, Play } from 'lucide-react';
+import { X, Play, ZoomIn } from 'lucide-react';
 import { GalleryItem } from '@/types';
 import { YouTubeEmbed } from './YouTubeEmbed';
-import { useTheme } from '@/contexts/ThemeContext';
 
 interface GalleryGridProps {
   items: GalleryItem[];
 }
 
+function extractYouTubeId(url: string): string {
+  const match = url.match(/^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
+  return match && match[2].length === 11 ? match[2] : '';
+}
+
 export const GalleryGrid: React.FC<GalleryGridProps> = ({ items }) => {
-  const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
-  const { themeConfig } = useTheme();
+  const [selected, setSelected] = useState<GalleryItem | null>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+
+  const open = useCallback((item: GalleryItem, el: HTMLElement) => {
+    triggerRef.current = el;
+    setSelected(item);
+  }, []);
+
+  const close = useCallback(() => {
+    setSelected(null);
+    // return focus to the thumbnail that opened the lightbox
+    setTimeout(() => (triggerRef.current as HTMLElement | null)?.focus(), 50);
+  }, []);
+
+  // trap focus inside lightbox & close on Escape
+  useEffect(() => {
+    if (!selected) return;
+    closeRef.current?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') close();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selected, close]);
 
   return (
     <>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            onClick={() => setSelectedItem(item)}
-            className="relative aspect-square rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 shadow-lg"
-            style={{
-              border: `2px solid ${themeConfig.accentColor}44`,
-            }}
-          >
-            {item.type === 'image' && item.imageUrl ? (
-              <Image
-                src={item.imageUrl}
-                alt={item.caption || 'Gallery image'}
-                fill
-                className="object-cover"
-              />
-            ) : item.type === 'video' && item.youtubeUrl ? (
-              <div className="relative w-full h-full bg-black flex items-center justify-center">
-                <Image
-                  src={`https://img.youtube.com/vi/${extractYouTubeId(item.youtubeUrl)}/maxresdefault.jpg`}
-                  alt={item.caption || 'Video thumbnail'}
-                  fill
-                  className="object-cover opacity-70"
-                />
-                <div
-                  className="absolute inset-0 flex items-center justify-center"
-                  style={{ backgroundColor: `${themeConfig.accentColor}33` }}
-                >
-                  <Play size={48} className="opacity-90" style={{ color: themeConfig.accentColor }} />
-                </div>
-              </div>
-            ) : null}
-            {item.caption && (
-              <div
-                className="absolute bottom-0 left-0 right-0 p-2 text-xs backdrop-blur-sm"
-                style={{ backgroundColor: `${themeConfig.bgColor}cc` }}
+      <div
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"
+        role="list"
+        aria-label="Gallery items"
+      >
+        {items.map(item => {
+          const ytId = item.type === 'video' && item.youtubeUrl ? extractYouTubeId(item.youtubeUrl) : '';
+
+          return (
+            <div
+              key={item.id}
+              role="listitem"
+              className="gallery-item"
+              style={{ border: '1px solid rgba(167,139,250,0.18)' }}
+            >
+              <button
+                className="w-full h-full focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:outline-none rounded-xl"
+                aria-label={item.caption ? `View: ${item.caption}` : 'View gallery item'}
+                onClick={e => open(item, e.currentTarget)}
               >
-                {item.caption}
-              </div>
-            )}
-          </div>
-        ))}
+                {item.type === 'image' && item.imageUrl ? (
+                  <div className="relative w-full" style={{ aspectRatio: '1' }}>
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.caption || 'Church gallery photo'}
+                      fill
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      className="object-cover"
+                      loading="lazy"
+                    />
+                    <span className="gallery-item-overlay">
+                      <ZoomIn size={22} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
+                    </span>
+                  </div>
+                ) : ytId ? (
+                  <div className="relative w-full bg-black" style={{ aspectRatio: '1' }}>
+                    <Image
+                      src={`https://img.youtube.com/vi/${ytId}/mqdefault.jpg`}
+                      alt={item.caption || 'Video thumbnail'}
+                      fill
+                      sizes="(max-width: 768px) 50vw, 33vw"
+                      className="object-cover opacity-70"
+                      loading="lazy"
+                    />
+                    <span className="gallery-item-overlay" style={{ background: 'rgba(0,0,0,0.3)' }}>
+                      <Play size={36} style={{ color: '#D4AF37' }} aria-hidden="true" />
+                    </span>
+                  </div>
+                ) : null}
+
+                {item.caption && (
+                  <span
+                    className="absolute bottom-0 left-0 right-0 px-2 py-1.5 text-[11px] text-white leading-tight text-left"
+                    style={{ background: 'rgba(15,5,32,0.75)', backdropFilter: 'blur(4px)' }}
+                  >
+                    {item.caption}
+                  </span>
+                )}
+              </button>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Lightbox Modal */}
-      {selectedItem && (
+      {/* Lightbox */}
+      {selected && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={selected.caption || 'Gallery image lightbox'}
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)' }}
-          onClick={() => setSelectedItem(null)}
+          style={{ background: 'rgba(0,0,0,0.92)' }}
+          onClick={close}
         >
           <button
-            onClick={() => setSelectedItem(null)}
-            className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/10 transition-colors"
-            style={{ color: themeConfig.accentColor }}
+            ref={closeRef}
+            onClick={close}
+            aria-label="Close lightbox"
+            className="absolute top-4 right-4 p-3 rounded-full transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:outline-none"
+            style={{ background: 'rgba(255,255,255,0.08)', color: '#D4AF37' }}
           >
-            <X size={32} />
+            <X size={22} aria-hidden="true" />
           </button>
 
-          <div className="max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
-            {selectedItem.type === 'image' && selectedItem.imageUrl ? (
-              <div className="relative w-full" style={{ maxHeight: '80vh' }}>
-                <Image
-                  src={selectedItem.imageUrl}
-                  alt={selectedItem.caption || 'Gallery image'}
-                  width={1200}
-                  height={800}
-                  className="w-full h-auto rounded-lg"
-                />
-              </div>
-            ) : selectedItem.type === 'video' && selectedItem.youtubeUrl ? (
-              <YouTubeEmbed url={selectedItem.youtubeUrl} title={selectedItem.caption} />
+          <div
+            className="max-w-4xl w-full"
+            onClick={e => e.stopPropagation()}
+          >
+            {selected.type === 'image' && selected.imageUrl ? (
+              <Image
+                src={selected.imageUrl}
+                alt={selected.caption || 'Gallery image'}
+                width={1200}
+                height={800}
+                className="w-full h-auto rounded-xl"
+                style={{ maxHeight: '80vh', objectFit: 'contain' }}
+                priority
+              />
+            ) : selected.type === 'video' && selected.youtubeUrl ? (
+              <YouTubeEmbed url={selected.youtubeUrl} title={selected.caption} />
             ) : null}
-            {selectedItem.caption && (
-              <p className="mt-4 text-center text-white">{selectedItem.caption}</p>
+
+            {selected.caption && (
+              <p className="mt-3 text-center text-sm" style={{ color: 'rgba(196,181,253,0.85)' }}>
+                {selected.caption}
+              </p>
             )}
           </div>
         </div>
@@ -101,9 +158,3 @@ export const GalleryGrid: React.FC<GalleryGridProps> = ({ items }) => {
     </>
   );
 };
-
-function extractYouTubeId(url: string): string {
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : '';
-}
