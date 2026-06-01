@@ -1,1 +1,276 @@
-if(!self.define){let s,e={};const a=(a,n)=>(a=new URL(a+".js",n).href,e[a]||new Promise(e=>{if("document"in self){const s=document.createElement("script");s.src=a,s.onload=e,document.head.appendChild(s)}else s=a,importScripts(a),e()}).then(()=>{let s=e[a];if(!s)throw new Error(`Module ${a} didn’t register its module`);return s}));self.define=(n,t)=>{const i=s||("document"in self?document.currentScript.src:"")||location.href;if(e[i])return;let c={};const r=s=>a(s,i),u={module:{uri:i},exports:c,require:r};e[i]=Promise.all(n.map(s=>u[s]||r(s))).then(s=>(t(...s),c))}}define(["./workbox-f52fd911"],function(s){"use strict";importScripts(),self.skipWaiting(),s.clientsClaim(),s.precacheAndRoute([{url:"/_next/app-build-manifest.json",revision:"ac4c9df65cdd7e46c56b9772f4eeef0a"},{url:"/_next/static/chunks/117-2b5f8e9a6f50682c.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/250-8943f26c62c75313.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/259-93ff6522a5a880e2.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/281-84704453c1087c55.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/648-0d593a7315fc2943.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/676-958475787be8b5f3.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/69806262-06eef62bd9007407.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/_not-found/page-4cef5b2b5816cf79.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/admin/announcements-mgmt/page-8b15025b055b9e07.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/admin/dashboard/page-a4c2058c5c572011.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/admin/gallery-mgmt/page-a8611975b3d385ff.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/admin/page-8066234a3b21a942.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/admin/pastors/page-ca56e381c575de04.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/admin/settings/page-9cb4ee84f3263966.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/admin/sunday-school/page-195f2934e8e58ea4.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/admin/youth/page-b0b5247a2b624c87.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/announcements/page-8e834d858502cddd.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/gallery/page-fb4b927d86d2387a.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/giving/page-ff5b1a1d16004480.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/layout-5717e9bfc9193d58.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/more/page-97db0f5dd5ba21d6.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/page-28e0a02ef0804a90.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/pastors-corner/page-51685525c7b48d4a.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/sunday-school/page-40683a396870658e.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/app/youth/page-4dcdd312f8d4849d.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/bc9e92e6-10c1e0218605e395.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/fd9d1056-13f2035e4b026c54.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/framework-f66176bb897dc684.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/main-1eb757a819322a11.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/main-app-3d370262435561ac.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/pages/_app-72b849fbd24ac258.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/pages/_error-7ba65e1336b92748.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/chunks/polyfills-42372ed130431b0a.js",revision:"846118c33b2c0e922d7b3a7676f81f6f"},{url:"/_next/static/chunks/webpack-a3c37fcbf859f6f9.js",revision:"sQy6SNw1HQgjzAFElXa5d"},{url:"/_next/static/css/a1d33ced80247176.css",revision:"a1d33ced80247176"},{url:"/_next/static/sQy6SNw1HQgjzAFElXa5d/_buildManifest.js",revision:"c155cce658e53418dec34664328b51ac"},{url:"/_next/static/sQy6SNw1HQgjzAFElXa5d/_ssgManifest.js",revision:"b6652df95db52feb4daf4eca35380933"},{url:"/manifest.json",revision:"51f1959376f118f305b401e94e8ec423"}],{ignoreURLParametersMatching:[]}),s.cleanupOutdatedCaches(),s.registerRoute("/",new s.NetworkFirst({cacheName:"start-url",plugins:[{cacheWillUpdate:async({request:s,response:e,event:a,state:n})=>e&&"opaqueredirect"===e.type?new Response(e.body,{status:200,statusText:"OK",headers:e.headers}):e}]}),"GET"),s.registerRoute(/^https:\/\/firestore\.googleapis\.com/,new s.NetworkFirst({cacheName:"firestore-cache",plugins:[new s.ExpirationPlugin({maxEntries:50,maxAgeSeconds:86400})]}),"GET"),s.registerRoute(/^https:\/\/www\.youtube\.com/,new s.CacheFirst({cacheName:"youtube-cache",plugins:[new s.ExpirationPlugin({maxEntries:20,maxAgeSeconds:604800})]}),"GET")});
+// ═══════════════════════════════════════════════════════════
+//  CRC Church App — Service Worker
+//  Cinematic PWA with offline support
+// ═══════════════════════════════════════════════════════════
+
+const CACHE_VERSION = 'v1';
+const STATIC_CACHE  = `crc-static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `crc-dynamic-${CACHE_VERSION}`;
+const IMAGE_CACHE   = `crc-images-${CACHE_VERSION}`;
+
+// Assets to pre-cache on install
+const PRECACHE_ASSETS = [
+  '/',
+  '/giving',
+  '/gallery',
+  '/announcements',
+  '/offline',
+  '/manifest.json',
+  // fonts are loaded via Google Fonts — handled by runtime cache below
+];
+
+const MAX_DYNAMIC_ITEMS = 40;
+const MAX_IMAGE_ITEMS   = 60;
+
+// ── INSTALL ────────────────────────────────────────────────
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(STATIC_CACHE)
+      .then(cache => cache.addAll(PRECACHE_ASSETS))
+      .then(() => self.skipWaiting())
+  );
+});
+
+// ── ACTIVATE ───────────────────────────────────────────────
+self.addEventListener('activate', (event) => {
+  const allowedCaches = [STATIC_CACHE, DYNAMIC_CACHE, IMAGE_CACHE];
+
+  event.waitUntil(
+    caches.keys()
+      .then(keys =>
+        Promise.all(
+          keys
+            .filter(key => !allowedCaches.includes(key))
+            .map(key => caches.delete(key))
+        )
+      )
+      .then(() => self.clients.claim())
+  );
+});
+
+// ── FETCH ──────────────────────────────────────────────────
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // Skip non-GET, browser-extension, and firebase/analytics requests
+  if (request.method !== 'GET') return;
+  if (url.origin !== location.origin &&
+      !url.hostname.includes('fonts.googleapis.com') &&
+      !url.hostname.includes('fonts.gstatic.com')) return;
+  if (url.hostname.includes('firestore.googleapis.com')) return;
+  if (url.hostname.includes('firebase')) return;
+  if (url.pathname.includes('/_next/webpack-hmr')) return;
+
+  // Images — cache-first with size limit
+  if (request.destination === 'image' ||
+      url.pathname.match(/\.(png|jpg|jpeg|gif|webp|svg|ico)$/)) {
+    event.respondWith(cacheFirst(request, IMAGE_CACHE, MAX_IMAGE_ITEMS));
+    return;
+  }
+
+  // Google Fonts — cache-first (they're stable)
+  if (url.hostname.includes('fonts.gstatic.com') ||
+      url.hostname.includes('fonts.googleapis.com')) {
+    event.respondWith(cacheFirst(request, STATIC_CACHE));
+    return;
+  }
+
+  // Next.js static assets (_next/static) — cache-first (hash-named, immutable)
+  if (url.pathname.startsWith('/_next/static/')) {
+    event.respondWith(cacheFirst(request, STATIC_CACHE));
+    return;
+  }
+
+  // HTML navigation — network-first with offline fallback
+  if (request.mode === 'navigate') {
+    event.respondWith(networkFirstWithOfflineFallback(request));
+    return;
+  }
+
+  // Everything else — stale-while-revalidate
+  event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE, MAX_DYNAMIC_ITEMS));
+});
+
+// ── STRATEGIES ─────────────────────────────────────────────
+
+async function cacheFirst(request, cacheName, maxItems) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+  if (cached) return cached;
+
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      await cache.put(request, response.clone());
+      if (maxItems) await trimCache(cacheName, maxItems);
+    }
+    return response;
+  } catch {
+    return new Response('Offline', { status: 503 });
+  }
+}
+
+async function networkFirstWithOfflineFallback(request) {
+  const cache = await caches.open(DYNAMIC_CACHE);
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      await cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    const cached = await cache.match(request);
+    if (cached) return cached;
+
+    // Try static cache
+    const staticCached = await caches.match(request, { ignoreSearch: true });
+    if (staticCached) return staticCached;
+
+    // Offline fallback page
+    const offlinePage = await caches.match('/offline');
+    if (offlinePage) return offlinePage;
+
+    return new Response(offlineHTML(), {
+      headers: { 'Content-Type': 'text/html' },
+      status: 503,
+    });
+  }
+}
+
+async function staleWhileRevalidate(request, cacheName, maxItems) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+
+  const fetchPromise = fetch(request)
+    .then(response => {
+      if (response.ok) {
+        cache.put(request, response.clone());
+        if (maxItems) trimCache(cacheName, maxItems);
+      }
+      return response;
+    })
+    .catch(() => null);
+
+  return cached || await fetchPromise || new Response('Offline', { status: 503 });
+}
+
+// ── CACHE TRIM ─────────────────────────────────────────────
+async function trimCache(cacheName, maxItems) {
+  const cache = await caches.open(cacheName);
+  const keys  = await cache.keys();
+  if (keys.length > maxItems) {
+    await cache.delete(keys[0]);
+    await trimCache(cacheName, maxItems);
+  }
+}
+
+// ── INLINE OFFLINE PAGE ────────────────────────────────────
+function offlineHTML() {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Offline — Christ Restoration Centre</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(160deg, #020203 0%, #05040a 50%, #020203 100%);
+      color: #EDEDEF;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      -webkit-font-smoothing: antialiased;
+    }
+    .cross {
+      width: 48px; height: 60px;
+      position: relative; margin: 0 auto 28px;
+    }
+    .cross::before {
+      content:''; position:absolute;
+      left:50%; top:0; transform:translateX(-50%);
+      width:10px; height:100%;
+      background:#D4AF37; border-radius:5px;
+    }
+    .cross::after {
+      content:''; position:absolute;
+      top:30%; left:0;
+      width:100%; height:10px;
+      background:#D4AF37; border-radius:5px;
+    }
+    h1 {
+      font-size:22px; font-weight:700;
+      background:linear-gradient(135deg,#D4AF37 0%,#F5D479 50%,#B8941F 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+      margin-bottom:10px;
+    }
+    p { font-size:14px; color:rgba(138,143,152,0.85); line-height:1.6; max-width:280px; }
+    button {
+      margin-top:28px;
+      padding:12px 28px;
+      background:linear-gradient(135deg,#D4AF37,#B8941F);
+      color:#020203; border:none;
+      border-radius:12px; font-size:14px;
+      font-weight:600; cursor:pointer;
+      box-shadow:0 4px 20px rgba(212,175,55,0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="cross" aria-hidden="true"></div>
+  <h1>You're Offline</h1>
+  <p>Check your connection and try again. Pages you've already visited will still load.</p>
+  <button onclick="location.reload()">Try Again</button>
+</body>
+</html>`;
+}
+
+// ── PUSH NOTIFICATIONS ─────────────────────────────────────
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+
+  let payload;
+  try {
+    payload = event.data.json();
+  } catch {
+    payload = { title: 'CRC Update', body: event.data.text() };
+  }
+
+  const options = {
+    body: payload.body || '',
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/icon-72x72.png',
+    tag: payload.tag || 'crc-notification',
+    data: { url: payload.url || '/' },
+    vibrate: [200, 100, 200],
+    requireInteraction: false,
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(payload.title || 'Christ Restoration Centre', options)
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl = event.notification.data?.url || '/';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then(clientList => {
+        for (const client of clientList) {
+          if (client.url === targetUrl && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        if (clients.openWindow) return clients.openWindow(targetUrl);
+      })
+  );
+});

@@ -1,293 +1,144 @@
-# Christ Restoration Centre - Progressive Web App
+# CRC PWA — Integration Guide
 
-A complete Progressive Web App (PWA) for Christ Restoration Centre church, featuring ministry sections, admin panel, and offline functionality.
-
-## Features
-
-- 📱 **Installable PWA** - Add to home screen on mobile devices
-- 🎨 **Themed Sections** - Distinct designs for Home, Pastor's Corner, Youth, and Sunday School
-- 📺 **YouTube Integration** - Daily messages and Sunday sermons
-- 📅 **Event Management** - Announcements with recurring events support
-- 🖼️ **Media Gallery** - Photos and videos organized by ministry
-- 💰 **Online Giving** - Bank details and online giving links
-- 🔐 **Admin Panel** - Complete content management system
-- 🌐 **Offline Support** - Cached content for offline viewing
-- 🎭 **Smooth Transitions** - Theme changes with beautiful animations
-
-## Tech Stack
-
-- **Frontend**: Next.js 14 (App Router), React, TypeScript, Tailwind CSS
-- **Backend & Database**: Firebase (Firestore, Storage, Authentication)
-- **PWA**: next-pwa with service worker caching
-- **UI Components**: Lucide React icons, custom components
-- **Deployment**: Ready for Vercel or Netlify
-
-## Setup Instructions
-
-### 1. Prerequisites
-
-- Node.js 18+ and npm
-- Firebase account
-- Git
-
-### 2. Firebase Setup
-
-1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Create a new project called "Christ Restoration Centre"
-3. Enable these services:
-   - **Firestore Database**: Create in production mode
-   - **Authentication**: Enable Email/Password provider
-   - **Storage**: Enable for image uploads
-
-4. Create a web app in Firebase:
-   - Project Settings > General > Your apps > Add app > Web
-   - Copy the configuration values
-
-5. Set up Firestore Security Rules:
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Public read access for all collections
-    match /{document=**} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-  }
-}
-```
-
-6. Set up Storage Security Rules:
-```javascript
-rules_version = '2';
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /{allPaths=**} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-  }
-}
-```
-
-7. Create an admin user in Firebase Console:
-   - Authentication > Users > Add user
-   - Email: admin@church.com (or your email)
-   - Set a secure password
-
-### 3. Project Setup
-
-1. Clone or download this project
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Create `.env.local` file:
-```bash
-cp .env.local.example .env.local
-```
-
-4. Add your Firebase configuration to `.env.local`:
-```env
-NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-```
-
-5. Create app icons:
-   - Create `public/icon-192x192.png` (192x192px)
-   - Create `public/icon-512x512.png` (512x512px)
-   - Use a logo with the eagle-cross design or your church logo
-
-### 4. Initial Data Setup
-
-The app uses these Firestore collections:
-- `dailyMessages` - Daily devotional messages
-- `sermons` - Sunday sermon videos
-- `youthAnnouncements` - Youth ministry announcements
-- `sundaySchoolAnnouncements` - Sunday School announcements
-- `globalAnnouncements` - Church-wide announcements
-- `galleryItems` - Photos and videos
-- `appSettings` - App configuration (single document: `main`)
-- `youthVerseOfWeek` - Youth verse (single document: `current`)
-- `sundaySchoolMemoryVerse` - Sunday School memory verse (single document: `current`)
-
-Create an `appSettings` document manually in Firestore:
-1. Go to Firestore > Start collection > `appSettings`
-2. Document ID: `main`
-3. Add fields:
-   - `verseOfTheDay` (string): "Be strong and courageous..."
-   - `givingUrl` (string): https://your-giving-platform.com
-
-### 5. Run Development Server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### 6. Testing the App
-
-1. **Test Public Pages:**
-   - Home (/)
-   - Pastor's Corner (/pastors-corner)
-   - Youth (/youth)
-   - Sunday School (/sunday-school)
-   - Announcements (/announcements)
-   - Gallery (/gallery)
-   - Giving (/giving)
-
-2. **Test Admin Panel:**
-   - Go to /admin
-   - Login with your Firebase admin credentials
-   - Add sample content:
-     - Daily message
-     - Sermon
-     - Announcements
-     - Gallery items
-     - Verses
-
-3. **Test PWA Installation:**
-   - Open in Chrome/Edge on desktop or mobile
-   - Look for "Install" button in address bar
-   - Or use the "Add to Home Screen" button on the home page
-
-## Building for Production
-
-```bash
-npm run build
-npm start
-```
-
-## Deployment
-
-### Vercel (Recommended)
-
-1. Push code to GitHub
-2. Go to [Vercel](https://vercel.com)
-3. Import your repository
-4. Add environment variables from `.env.local`
-5. Deploy
-
-### Netlify
-
-1. Build the project:
-```bash
-npm run build
-```
-
-2. Deploy the `.next` folder to Netlify
-3. Add environment variables in Netlify dashboard
-4. Configure rewrites in `netlify.toml`:
-```toml
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-```
-
-## App Structure
-
-```
-src/
-├── app/                    # Next.js app router pages
-│   ├── admin/             # Admin panel pages
-│   ├── pastors-corner/    # Pastor's corner page
-│   ├── youth/             # Youth ministry page
-│   ├── sunday-school/     # Sunday School page
-│   ├── announcements/     # Announcements page
-│   ├── gallery/           # Gallery page
-│   ├── giving/            # Giving page
-│   └── more/              # More options page
-├── components/            # Reusable React components
-│   ├── admin/            # Admin-specific components
-│   ├── Logo.tsx          # Church logo component
-│   ├── BottomNav.tsx     # Bottom navigation
-│   ├── InstallButton.tsx # PWA install prompt
-│   └── ...
-├── contexts/              # React contexts
-│   ├── ThemeContext.tsx  # Theme management
-│   └── AuthContext.tsx   # Authentication
-├── lib/                   # Utility libraries
-│   └── firebase.ts       # Firebase configuration
-└── types/                 # TypeScript type definitions
-```
-
-## Admin Panel Features
-
-Access at `/admin` with authenticated credentials:
-
-- **Dashboard**: Overview and quick access
-- **Pastor's Corner**: Add/edit daily messages and sermons
-- **Youth Corner**: Manage youth announcements, gallery, verse of week
-- **Sunday School**: Manage Sunday School content
-- **Announcements**: Create global and recurring announcements
-- **Gallery**: Upload images and add YouTube videos
-
-## Customization
-
-### Colors
-
-Edit `tailwind.config.js` to change theme colors:
-```javascript
-colors: {
-  brand: {
-    teal: '#0D5C63',    // Main brand color
-    gold: '#D4AF37',     // Accent color
-  },
-  pastor: {
-    bg: '#3A2C3E',       // Pastor's Corner background
-    accent: '#D4AF37',   // Pastor's Corner accent
-  },
-  // ... more themes
-}
-```
-
-### Fonts
-
-Fonts are loaded from Google Fonts in `globals.css`:
-- Playfair Display (Home, Pastor's Corner)
-- Poppins (Youth)
-- Nunito (Sunday School)
-
-### Logo
-
-Replace the eagle-cross SVG in `src/components/Logo.tsx` with your church logo.
-
-## Troubleshooting
-
-### PWA Not Installing
-- Ensure you're using HTTPS (required for PWA)
-- Check manifest.json is accessible
-- Verify service worker is registered
-
-### Firebase Errors
-- Check environment variables are correct
-- Verify Firebase services are enabled
-- Check Firestore/Storage security rules
-
-### Images Not Loading
-- Verify images are uploaded to Firebase Storage
-- Check Storage security rules allow public read
-- Ensure image URLs are valid
-
-## Support
-
-For issues or questions:
-- Check Firebase Console for errors
-- Review browser console for JavaScript errors
-- Verify Firestore data structure matches expected format
-
-## License
-
-This project is created for Christ Restoration Centre church.
+All files in this package are drop-in additions to your existing Next.js repo.
+No existing files are overwritten except `src/app/layout.tsx` (merge notes below).
 
 ---
 
-Built with ❤️ for the Kingdom of God
+## File Map
+
+```
+public/
+  manifest.json                  ← Web App Manifest
+  sw.js                          ← Service Worker (cache + offline + push)
+
+src/
+  app/
+    layout.tsx                   ← Root layout (PWA meta + SW registration)
+    offline/
+      page.tsx                   ← Offline fallback page
+
+  components/
+    InstallButton.tsx            ← "Install App" button (Android + iOS hint)
+    ServiceWorkerRegistration.tsx ← Registers SW on mount (add to layout once)
+
+scripts/
+  generate-icons.js              ← Generates all icon PNGs from SVG source
+```
+
+---
+
+## Step 1 — Generate Icons
+
+```bash
+npm install sharp --save-dev
+node scripts/generate-icons.js
+```
+
+This creates `public/icons/` with every size listed in `manifest.json`.
+Replace the SVG in `generate-icons.js` with your actual church logo if you have one.
+
+---
+
+## Step 2 — Drop in the files
+
+Copy all files to your repo preserving the paths above.
+
+---
+
+## Step 3 — Merge `layout.tsx`
+
+If you already have a `layout.tsx`, merge these parts in:
+
+```tsx
+// 1. Add these imports
+import { ServiceWorkerRegistration } from '@/components/ServiceWorkerRegistration';
+
+// 2. Add to <head>
+export const metadata: Metadata = {
+  manifest: '/manifest.json',
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'CRC' },
+  // ... rest of your metadata
+};
+
+export const viewport: Viewport = {
+  themeColor: '#050506',
+  viewportFit: 'cover',
+};
+
+// 3. Add inside <body> (before children)
+<ServiceWorkerRegistration />
+```
+
+---
+
+## Step 4 — Add InstallButton to Home
+
+`InstallButton` is already imported in `src/app/page.tsx` — it's used in the hero section.
+It auto-hides when the app is already installed or when neither Android nor iOS install is available.
+
+---
+
+## Step 5 — next.config.js headers (recommended)
+
+Add service worker headers so browsers don't cache-bust the SW:
+
+```js
+// next.config.js
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/sw.js',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
+          { key: 'Service-Worker-Allowed', value: '/' },
+        ],
+      },
+      {
+        source: '/manifest.json',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
+        ],
+      },
+    ];
+  },
+};
+module.exports = nextConfig;
+```
+
+---
+
+## Caching Strategy Summary
+
+| Request type          | Strategy                  |
+|-----------------------|---------------------------|
+| HTML navigation       | Network-first → offline fallback |
+| `_next/static/*`      | Cache-first (immutable)   |
+| Google Fonts          | Cache-first               |
+| Images                | Cache-first (max 60)      |
+| API / Firestore       | Bypassed (live always)    |
+| Everything else       | Stale-while-revalidate    |
+
+---
+
+## Push Notifications (optional)
+
+The service worker already handles `push` and `notificationclick` events.
+To send a push, POST a JSON payload to your server with:
+
+```json
+{
+  "title": "New Announcement",
+  "body": "Join us this Sunday at 9am",
+  "url": "/announcements",
+  "tag": "announcement-123"
+}
+```
+
+---
+
+## Lighthouse PWA Checklist
+
+After deploying, run Lighthouse (Chrome DevTools → Lighthouse → PWA).
+You should score 100 on PWA with these files in place.
